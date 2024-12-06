@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Película</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <div class="text-center mb-4">
+        <h3><strong>Editar Película</strong></h3>
+    </div>
+
+    <form th:object="${film}" th:action="@{/maintenance/edit-confirm}" method="post" id="editFilmForm">
+
+        <!-- Código de la película -->
+        <div class="mb-3 row">
+            <label for="filmId" class="col-sm-3">Código</label>
+            <div class="col-sm-9">
+                <input type="text" id="filmId" th:field="*{filmId}" class="form-control" readonly>
+            </div>
+        </div>
+
+        <!-- Título de la película -->
+        <div class="mb-3 row">
+            <label for="title" class="col-sm-3">Título</label>
+            <div class="col-sm-9">
+                <input type="text" id="title" th:field="*{title}" class="form-control" required>
+            </div>
+        </div>
+
+        <!-- Descripción de la película -->
+        <div class="mb-3 row">
+            <label for="description" class="col-sm-3">Descripción</label>
+            <div class="col-sm-9">
+                <input type="text" id="description" th:field="*{description}" class="form-control" required>
+            </div>
+        </div>
+
+        <!-- Año de filmación -->
+        <div class="mb-3 row">
+            <label for="releaseYear" class="col-sm-3">Año de filmación</label>
+            <div class="col-sm-9">
+                <input type="number" id="releaseYear" th:field="*{releaseYear}" class="form-control" required>
+            </div>
+        </div>
+
+        <!-- Tiempo de alquiler -->
+        <div class="mb-3 row">
+            <label for="rentalDuration" class="col-sm-3">Tiempo de alquiler (Días)</label>
+            <div class="col-sm-9">
+                <input type="number" id="rentalDuration" th:field="*{rentalDuration}" class="form-control" required>
+            </div>
+        </div>
+
+        <!-- Precio de alquiler -->
+        <div class="mb-3 row">
+            <label for="rentalRate" class="col-sm-3">Precio de alquiler (USD)</label>
+            <div class="col-sm-9">
+                <input type="number" step="0.01" id="rentalRate" th:field="*{rentalRate}" class="form-control" required>
+            </div>
+        </div>
+
+        <!-- Duración de la película -->
+        <div class="mb-3 row">
+            <label for="length" class="col-sm-3">Duración de la película (Minutos)</label>
+            <div class="col-sm-9">
+                <input type="number" id="length" th:field="*{length}" class="form-control" required>
+            </div>
+        </div>
+
+        <!-- Costo de reemplazo -->
+        <div class="mb-3 row">
+            <label for="replacementCost" class="col-sm-3">Costo de reemplazo (USD)</label>
+            <div class="col-sm-9">
+                <input type="number" step="0.01" id="replacementCost" th:field="*{replacementCost}" class="form-control" required>
+            </div>
+        </div>
+
+        <!-- ComboBox de Clasificación -->
+        <div class="mb-3 row">
+            <label for="rating" class="col-sm-3">Clasificación</label>
+            <div class="col-sm-3">
+                <select id="rating" name="rating" class="form-select" required>
+                    <option th:each="rating : ${ratings}"
+                            th:value="${rating}"
+                            th:text="${rating}"
+                            th:selected="${rating == film.rating()}"></option>
+                </select>
+                <small class="form-text text-muted">Selecciona una clasificación para la película</small>
+            </div>
+        </div>
+
+        <!-- Características de la película -->
+        <div class="mb-3 row">
+            <label for="specialFeatures" class="col-sm-3">Características de la película</label>
+            <div class="col-sm-9">
+                <input type="text" id="specialFeatures" th:field="*{specialFeatures}" class="form-control" required>
+            </div>
+        </div>
+
+        <!-- ComboBox de Categoría -->
+        <div class="mb-3 row">
+            <label for="categories" class="col-sm-3">Categoría</label>
+            <div class="col-sm-3">
+                <select id="categories" th:field="*{categories}" class="form-select" required>
+                    <option th:each="category : ${categories}" th:value="${category}" th:text="${category}"
+                            th:selected="${category == film.categories.get(0)}"></option>
+                </select>
+                <small class="form-text text-muted">Selecciona una categoría para la película</small>
+            </div>
+        </div>
+        <br>
+        <!-- Actores actuales (ya asociados con la película) -->
+        <div class="mb-3 row">
+            <label for="currentActors" class="col-sm-2">Actores actuales</label>
+            <div class="col-sm-3">
+                <select id="currentActors" name="currentActors" class="form-control actor-select" multiple disabled>
+                    <option th:each="actor : ${currentActors}" th:value="${actor}" th:text="${actor}"></option>
+                </select>
+                <small class="form-text text-muted">Actores ya asociados con esta película</small>
+            </div>
+
+            <!-- Actores disponibles para agregar (nuevo ComboBox) -->
+            <label for="actors" class="col-sm-2">Actores a agregar</label>
+            <div class="col-sm-3">
+                <select id="actors" name="actors" class="form-control actor-select" multiple>
+                    <option th:each="actorName : ${actorNames}" th:value="${actorName}" th:text="${actorName}"></option>
+                </select>
+                <small class="form-text text-muted">Selecciona actores para agregar a la película</small>
+            </div>
+        </div>
+
+        <!-- Botón de actualización -->
+        <div class="mb-3 row">
+            <label for="btnEdit" class="col-sm-3"></label>
+            <div class="col-sm-5">
+                <button type="button" class="btn btn-primary w-25" id="btnEdit" data-bs-toggle="modal" data-bs-target="#confirmModal">
+                    Actualizar
+                </button>
+                <button type="button" id="btnCancel" class="btn btn-secondary w-25" onclick="location.href='/maintenance/start'">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+<!-- Modal de confirmación -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">Confirmación de actualización</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas actualizar?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary" id="confirmUpdateBtn">Sí, actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('confirmUpdateBtn').addEventListener('click', function() {
+        document.getElementById('editFilmForm').submit();
+    });
+</script>
+
+
+<style>
+    body {
+        background-color: #f4f7fa;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .container {
+        margin-top: 50px;
+        margin-bottom: 50px;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .container:hover {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    h3 {
+        font-weight: bold;
+        color: #343a40;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 24px;
+        text-transform: uppercase;
+    }
+
+    label {
+        color: #333;
+        font-weight: bold;
+    }
+
+    .form-control,
+    .form-select {
+        border-radius: 8px;
+        height: 45px;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+        font-weight: bold;
+        padding: 12px 25px;
+        border-radius: 8px;
+        width: 170px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+        transform: scale(1.05);
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+        font-weight: bold;
+        padding: 12px 25px;
+        border-radius: 8px;
+        width: 170px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+        transform: scale(1.05);
+    }
+
+    .form-text {
+        font-size: 0.9rem;
+        color: #6c757d;
+        transition: color 0.3s ease;
+    }
+
+
+
+    .modal-content {
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-header {
+        background-color: #007bff;
+        color: white;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .modal-footer {
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .btn-close {
+        color: #fff;
+    }
+
+
+
+    .actor-select {
+        height: auto;
+        min-height: 180px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .actor-select:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Efecto de transición en los campos al enfocarse */
+    .form-control,
+    .form-select {
+        transition: all 0.3s ease;
+    }
+
+    /* Animación al cargar la página */
+    .container {
+        opacity: 0;
+        animation: fadeIn 1s forwards;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* Agregar más separación entre las filas de los combo boxes */
+    .mb-3 {
+        margin-bottom: 30px;
+    }
+
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
+

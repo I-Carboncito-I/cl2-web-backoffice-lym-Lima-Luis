@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalle de Película</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <style>
+    /* Fondo claro y limpio */
+    body {
+      background-color: #f4f4f9;
+      font-family: 'Arial', sans-serif;
+      color: #333;
+      padding: 40px;
+      margin: 0;
+    }
+
+    /* Contenedor principal */
+    .container {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      max-width: 900px;
+      margin: auto;
+    }
+
+    /* Título */
+    h3 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: #007bff;
+    }
+
+    /* Estilo de las etiquetas */
+    label {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #555;
+    }
+
+    /* Estilo de los inputs */
+    .form-control {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      padding: 12px;
+      margin-bottom: 20px;
+    }
+
+    .form-control:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    }
+
+    /* Estilo del botón */
+    button[type="button"] {
+      background-color: #007bff;
+      color: #fff;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: block;
+      width: 200px;
+      margin: 20px auto;
+    }
+
+    button[type="button"]:hover {
+      background-color: #0056b3;
+    }
+
+    /* Estilo de las listas */
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    li {
+      font-size: 1rem;
+      color: #555;
+      padding: 5px 0;
+    }
+
+    /* Alineación y espaciado */
+    .mb-3 {
+      margin-bottom: 20px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="mt-3 mb-3">
+    <h3>Detalle de Película</h3>
+  </div>
+
+  <form th:object="${film}">
+    <!-- Código de la película -->
+    <div class="mb-3 row">
+      <label for="filmId" class="col-sm-3">Código</label>
+      <div class="col-sm-9">
+        <input type="text" id="filmId" th:field="*{filmId}" class="form-control" readonly>
+      </div>
+    </div>
+
+    <!-- Título de la película -->
+    <div class="mb-3 row">
+      <label for="title" class="col-sm-3">Título</label>
+      <div class="col-sm-9">
+        <input type="text" id="title" th:field="*{title}" class="form-control" readonly>
+      </div>
+    </div>
+
+    <!-- Descripción de la película -->
+    <div class="mb-3 row">
+      <label for="description" class="col-sm-3">Descripción</label>
+      <div class="col-sm-9">
+        <input type="text" id="description" th:field="*{description}" class="form-control" readonly>
+      </div>
+    </div>
+
+    <!-- Año de filmación -->
+    <div class="mb-3 row">
+      <label for="releaseYear" class="col-sm-3">Año de filmación</label>
+      <div class="col-sm-9">
+        <input type="text" id="releaseYear" th:field="*{releaseYear}" class="form-control" readonly>
+      </div>
+    </div>
+
+    <!-- Tiempo de alquiler -->
+    <div class="mb-3 row">
+      <label for="rentalDuration" class="col-sm-3">Tiempo de alquiler (Días)</label>
+      <div class="col-sm-9">
+        <input type="text" id="rentalDuration" th:field="*{rentalDuration}" class="form-control" readonly>
+      </div>
+    </div>
+
+    <!-- Precio de alquiler -->
+    <div class="mb-3 row">
+      <label for="rentalRate" class="col-sm-3">Precio de alquiler (USD)</label>
+      <div class="col-sm-9">
+        <input type="text" id="rentalRate" th:field="*{rentalRate}" class="form-control" readonly>
+      </div>
+    </div>
+
+    <!-- Duración de la película -->
+    <div class="mb-3 row">
+      <label for="length" class="col-sm-3">Duración de la película (Minutos)</label>
+      <div class="col-sm-9">
+        <input type="text" id="length" th:field="*{length}" class="form-control" readonly>
+      </div>
+    </div>
+
+    <!-- Costo de reemplazo -->
+    <div class="mb-3 row">
+      <label for="replacementCost" class="col-sm-3">Costo de reemplazo (USD)</label>
+      <div class="col-sm-9">
+        <input type="text" id="replacementCost" th:field="*{replacementCost}" class="form-control" readonly>
+      </div>
+    </div>
+
+    <!-- Clasificación -->
+    <div class="mb-3 row">
+      <label for="rating" class="col-sm-3">Clasificación</label>
+      <div class="col-sm-9">
+        <input type="text" id="rating" th:field="*{rating}" class="form-control" readonly>
+      </div>
+    </div>
+
+    <!-- Características de la película -->
+    <div class="mb-3 row">
+      <label for="specialFeatures" class="col-sm-3">Características de la película</label>
+      <div class="col-sm-9">
+        <input type="text" id="specialFeatures" th:field="*{specialFeatures}" class="form-control" readonly>
+      </div>
+    </div>
+
+    <!-- Fecha de última actualización -->
+    <div class="mb-3 row">
+      <label for="lastUpdate" class="col-sm-3">Última actualización</label>
+      <div class="col-sm-9">
+        <input type="text" id="lastUpdate" th:field="*{lastUpdate}" class="form-control" readonly>
+      </div>
+    </div>
+
+    <!-- Idioma -->
+    <div class="mb-3 row">
+      <label for="languageName" class="col-sm-3">Idioma</label>
+      <div class="col-sm-9">
+        <input type="text" id="languageName" th:field="*{languageName}" class="form-control" readonly>
+      </div>
+    </div>
+
+    <!-- Categorías -->
+    <div class="mb-3 row">
+      <label class="col-sm-3">Categoría</label>
+      <div class="col-sm-9">
+        <ul>
+          <!-- Muestra las categorías -->
+          <li th:each="category : ${film.categories}" th:text="${category}"></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Actores -->
+    <div class="mb-3 row">
+      <label class="col-sm-3">Actores</label>
+      <div class="col-sm-9">
+        <ul>
+          <!-- Muestra los actores -->
+          <li th:each="actor : ${film.actors}" th:text="${actor}"></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Botón de Regreso -->
+    <div class="mb-3 row">
+      <label for="btnReturn" class="col-sm-3"></label>
+      <div class="col-sm-9">
+        <button type="button" id="btnReturn" class="btn btn-primary"
+                onclick="location.href='/maintenance/start'">
+          Regresar
+        </button>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+
+</body>
+</html>
+
